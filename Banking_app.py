@@ -1,28 +1,33 @@
-#testing afsdfasdasd
-Entering_User_ID=10000
-Entering_User_password=20       #global variable
+Entering_User_ID=10000 #Admin ID(Bank Managenment login) & Admin Can Not change His Admin ID
+#Because I defined He is As 1st Customer & New Customer IDs are incresing like New_Customer_ID=Admin_ID+1
+#If Bank want other kind of int Number   Bank Want to say to SoftWare Engineer & He will Change what they want starting to Admin ID Number
+#If they want other kind of str Number(int number with Letter or letters or ect...)  SoftWare Engineer want to add some codeing this Platform
+#Because I Write this Code For only int Type of ID Numbers
+Entering_User_password='8170126Gk' #Admin Password  & Admin can Change This password 
 Balance=50000
 Entering_User_Activity_No=00
-Amount=00
+Amount=00                                       #global variable
+Customer=[]
+User=[]
+Activity=[]
 
 import datetime as dt    
 on_time=dt.datetime.now()                                          #Time input for even every Transaction when were Done
 Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")
 
 Customers={10000:{'No':00,'ID':10000,'name':'admin','age':21,'address':'address','NIC_No':'NIC_No','Contact_No':123456789}}
-Dic_Customer_Details=Customers[Entering_User_ID]                     #Dic customers --> important recoded data list 
+Dic_Customer_Details=Customers[Entering_User_ID]                             #Dic customers --> import recoded data list 
 List_Customer_Details=list(Dic_Customer_Details.values())
 
-Customers_activities={10000:{00:{'No':00,"Time":Current_time,'diposit':00,'withdraw':00,'balance':30000}}}
+Customers_activities={10000:{00:{'No':00,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}}
 Dic_Customer_activities=Customers_activities[Entering_User_ID]
 Next_Activity_No=len(Dic_Customer_activities)
-List_of_Dic_Customer_activity_Numpers=list(Dic_Customer_activities.keys())
-Dic_Customer_activity=Dic_Customer_activities[00]                   #Dic Customers_activities --> important recoded data list
-List_Customer_activity=list(Dic_Customer_activity.values())
+Dic_Customer_activity=Dic_Customer_activities[00]
+list_Customer_activity=list(Dic_Customer_activities.values())                   #Dic Customers_activities --> import recoded data list
 
 Users={10000:{'NO':00,'ID':10000,'password':'35666960Gk','password_1':'8170126Gk'}}
 Dic_User=Users[Entering_User_ID]
-List_User=list(Dic_User.values())                                        #Dic Users --> important recoded data list
+List_User=list(Dic_User.values())
 
 def Choice_1():    
     while True:
@@ -37,9 +42,9 @@ def Choice_1():
                 print("====================================================================")
                 Options()
             else:
-                print("\nEnter the Correct Number!!!")
+                print("\nEnter the Correct Number For Your New Choice!!!")
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your New Choice!!!")
 
 def Main_Menu():    
     while True:
@@ -79,9 +84,9 @@ def Main_Menu():
                 print("====================================================================")
                 Options()
             else:
-                print("\nPlease Enter the the Correct Choice Number!!!") 
+                print("\nPlease Enter the Correct Number For Your Choice!!!") 
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your Choice!!!")
             
 def User_2nd_time():
     while True:
@@ -98,7 +103,7 @@ def User_2nd_time():
                 print("Thank For Using Our Service. \nPlease take Your Card!!!\n")
                 print("====================================================================")
                 print("====================================================================")
-                Options()
+            Options()
         except ValueError:
             print("\nPlease Enter Number Only For User ID!!!")
 
@@ -139,6 +144,24 @@ def Entry_of_withdraw():
     Dic_New_Activity['withdraw']=Amount
     Dic_New_Activity['balance']=Balance
     Dict_of_current_Customer.update(New_Activity)
+    List_Customer_activity=list(Dic_New_Activity.values())    
+    file=open(f"Customer_{Entering_User_ID}_activities.txt","a")
+    file.writelines(f'{List_Customer_activity}\n')
+    file.close()
+
+def Entry_of_Diposit():
+    global Customers_activities
+    Dict_of_current_Customer=Customers_activities.get(Entering_User_ID)
+    Next_Activity_No=len(Dict_of_current_Customer)
+    New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
+    Dic_New_Activity=New_Activity.get(Next_Activity_No)
+    Dic_New_Activity['diposit']=Amount
+    Dic_New_Activity['balance']=Balance
+    Dict_of_current_Customer.update(New_Activity)
+    List_Customer_activity=list(Dic_New_Activity.values())    
+    file=open(f"Customer_{Entering_User_ID}_activities.txt","a")
+    file.writelines(f'{List_Customer_activity}\n')
+    file.close()
 
 def Customer_withdraw():
     global Balance
@@ -151,36 +174,31 @@ def Customer_withdraw():
             print("So, Please Enter the withdraw money should be as a multiple of 100Rs.")
             print("Eg:SriLankan Rs.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.\n")      #Customers Withdraw purposes     
             Amount_1=int(input("Enter Your Withdraw Amount: ",))
-            if Balance-505>=Amount_1:    #Bank min balance is 500
-                if Amount_1%100==0:     #Like a ATM withdraw 
-                    Balance-=Amount_1+5  # 5Rs for Servise Charge
-                    Amount=Amount_1
-                    Entry_of_withdraw()
-                    print("\nPlease take Your Money: ",Amount_1)                              
-                    print("Your New Balance is: ",Balance)
+            if Amount_1>0:
+                if Balance-505>=Amount_1:    #Bank min balance is 500
+                    if Amount_1%100==0:     #Like a ATM withdraw 
+                        Balance-=Amount_1+5  # 5Rs for Servise Charge
+                        Amount=Amount_1
+                        Entry_of_withdraw()
+                        print("\nPlease take Your Money: ",Amount_1)                              
+                        print("Your New Balance is: ",Balance)
+                        break
+                    else:
+                        print("Your Avaiable Balance is:",Balance-505)
+                        print("\nWe didn't give coins,10,20,50Rs.")
+                        print("So, Please Enter the withdraw money should be as a multiple of 100Rs.")
+                        print("Eg:SriLankan Rs.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")                   
                     break
                 else:
-                    print("Your Avaiable Balance is:",Balance-505)
-                    print("\nWe didn't give coins,10,20,50Rs.")
-                    print("So, Please Enter the withdraw money should be as a multiple of 100Rs.")
-                    print("Eg:SriLankan Rs.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")                   
-                    break
-            else:
-                print("\nYou Have not Inof Money. \nYour Balance is: ",Balance)
-                print("Your Avaiable Balance is: ",Balance-500)
+                    print("\nYou Have not Inof Money. \nYour Balance is: ",Balance)
+                    print("Your Avaiable Balance is: ",Balance-500)
                 break
+            else:
+                print("Your Withdraw Amount Mustbe A Positive Number")
+            break
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
-
-def Entry_of_Diposit():
-    global Customers_activities
-    Dict_of_current_Customer=Customers_activities.get(Entering_User_ID)
-    Next_Activity_No=len(Dict_of_current_Customer)
-    New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
-    Dic_New_Activity=New_Activity.get(Next_Activity_No)
-    Dic_New_Activity['diposit']=Amount
-    Dic_New_Activity['balance']=Balance
-    Dict_of_current_Customer.update(New_Activity)
+            print("\nPlease Enter Number Only For Withdraw Amount!!!\nIf you want to left from this withdraw option")
+            print("Please Enter the withdraw Amount is: 99")
 
 def Customer_Deposit():
     global Amount
@@ -192,7 +210,7 @@ def Customer_Deposit():
             print("We didn't take coins,10,20,50RS.")                                         #customer's deposit
             print("So, Please put your money should be as a multiple of 100Rs.")
             print("Eg:Srilankan RS.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.\n")       
-            Amount_1=int(input("Enter Your Deposit Amount: ",))
+            Amount_1=int(input("(Put Your Money in Hole)Enter Your Deposit Amount: ",))
             if Amount_1>0:
                 if Amount_1%100==0:  #like a ATM diposit
                     Balance+=Amount_1-5 # 5Rs for Servise Charge
@@ -202,18 +220,23 @@ def Customer_Deposit():
                     print("Your New Balance is: ",Balance)
                     break
                 else:
-                    print("\nPlease take your diposit Money!!!")
-                    print("\nWe didn't take coins,10,20,50RS.")
+                    print("\nPlease take your diposit Money!!!\n\nYour Input is None Approved Money or Damaged Money")
+                    print("We didn't take coins,10,20,50RS.")
                     print("So, Please put your money should be as a multiple of 100Rs.")
                     print("Eg:Srilankan RS.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")
-                    break
-            else:
-                print("\nPlease Enter Positive Value only!!!")                
                 break
+            else:
+                print("\nPlease Enter Positive Value For Deposit Amount!!!\n\nPlease take your diposit Money!!!")
+                print("Your Input is None Approved Money or Damaged Money\nWe didn't take coins,10,20,50RS.") 
+                print("So, Please put your money should be as a multiple of 100Rs.")
+                print("Eg:Srilankan RS.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")               
+            break
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
-
-# User() 
+            print("\nPlease Enter Number Only For Deposit Amount!!!\n\nPlease take your diposit Money!!!")
+            print("Your Input is None Approved Money or Damaged Money\nWe didn't take coins,10,20,50RS.")
+            print("So, Please put your money should be as a multiple of 100Rs.")
+            print("Eg:Srilankan RS.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")
+        break
 
 def Add_Customer():
     global Customers
@@ -231,8 +254,7 @@ def Add_Customer():
     NIC_No=input("Enter the Customer NIC Number: ",)                         #only avaiable for admin 
     Contact_No=input("Enter the Customer Mobile Number:",)             
     password=str(len(Customers)+11)+age
-    New_Customer={ID:{'No':len(Customers),'ID':ID,'name':name,'age':age,'address':address,
-                    'NIC_No':NIC_No,'Contact_No':Contact_No}} 
+    New_Customer={ID:{'No':len(Customers),'ID':ID,'name':name,'age':age,'address':address,'NIC_No':NIC_No,'Contact_No':Contact_No}} 
     New_User={ID:{'No':len(Customers),'ID':ID,'password':password}}
     New_Customers_activities={ID:{00:{'No':00,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}}
     print(f"\n{name},Your User ID is: ",ID)
@@ -243,9 +265,10 @@ def Add_Customer():
     print(f"\n{New_Customer}")
     print("\n",New_User)
     print("\n",New_Customers_activities)
+    Add_Customer_Detail()
+    Add_User() 
+    Add_Activity()   
     print("====================================================================")
-
-# Add_Customer()
 
 def Admin_options():
     while True:
@@ -299,9 +322,9 @@ def Admin_options():
                 print("\nWe want to increase Our Valuable Customers Count.")
                 Options()
             else:
-                print("\nPlease Enter the the Correct Choice Number!!!") 
+                print("\nPlease Enter the Correct Number For Your Choice!!!") 
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your Choice!!!")
 
 def Choice_2():
     while True:
@@ -316,9 +339,9 @@ def Choice_2():
                 print("\nWe want to increase Our Valuable Customers Count.")               
                 Admin_options()
             else:
-                print("\nEnter the Correct Number!!!")
+                print("\nEnter the Correct Number For Your New Choice!!!")
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your New Choice!!!")
 
 def Admin_Using_time():
     global Entering_User_ID
@@ -339,11 +362,11 @@ def Admin_Using_time():
                 else:
                     print("\nYour Password is Incorrect!!!")    
                     print("Please Enter the Correct Password!!!")
-                    Admin_options()
+                Admin_options()
             else:
                 print("\nYour User ID is Incorrect!!!")    
                 print("Please Enter the Correct User ID and Password!!!")
-                Admin_options()
+            Admin_options()
         except ValueError:
             print("\nPlease Enter Number Only For User ID!!!")
 
@@ -366,9 +389,9 @@ def Options():
             elif Choice_1==2:
                 Admin_options()
             else:
-                print("\nEnter the Correct Number!!!")
+                print("\nEnter the Correct Number For Your Choice!!!")
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your Choice!!!")
 
 def Change_Password():
     global Users
@@ -380,9 +403,10 @@ def Change_Password():
     if New_Password==NewPassword:
         print("\nYour Password Change SuccessFul!")                #change password for Customer to change themself
         Dict_of_current_Customer['password']=New_Password
+        Update_Change_Password()
         Entering_User_password=New_Password
     else:
-        print("Your Password Not Change. \nPlease Try Again")
+        print("\nYour Entering Passwords are not Match.\nSo,Your Password is Not Change.\nPlease Try Again")
 
 def Search_User():
     global Entering_User_ID
@@ -399,7 +423,7 @@ def Search_User():
             print("\nUser ID is not Defined!!!") 
             Admin_options()
     except ValueError:
-        print("\nPlease Enter Number Only For User ID!!!")
+        print("\nPlease Enter Number Only For the Customer ID!!!")
 
 def Edit_Customer():
     global Customers
@@ -411,9 +435,10 @@ def Edit_Customer():
     Contact_No=input("Enter the Customer Mobile Number:",)             
     Edit_Customer={'ID':Entering_User_ID,'name':name,'age':age,'address':address,
                     'NIC_No':NIC_No,'Contact_No':Contact_No}        
-    print(f"\n{name},Your User ID is: ",Entering_User_ID)
     Customers[Entering_User_ID]=Edit_Customer
+    print(f"\n{name},Your User ID is: ",Entering_User_ID)
     print(f"\n{Edit_Customer}")
+    Update_Change_Customer_Details()
     print("====================================================================")
 
 def Choice_3():
@@ -429,9 +454,9 @@ def Choice_3():
                 print("\nWe want to increase Our Valuable Customers Count.")               
                 Admin_options()
             else:
-                print("\nEnter the Correct Number!!!")
+                print("\nEnter the Correct Number For Your New Choice!!!")
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Your New Choice!!!")
 
 def Change_Customer_Password():
     global Users
@@ -440,11 +465,12 @@ def Change_Customer_Password():
     New_Password=input("Enter Your New Password :",)
     NewPassword=input("Please Enter Your New Password Again :",)
     if New_Password==NewPassword:                                   #when Customer forgot there passwprs
-        print("\nYour Password Change SuccessFul!")
         Dict_of_current_Customer['password']=New_Password
+        print("\nYour Password Change SuccessFul!")
         print("\nCustomer New Password is: ",New_Password)
+        Update_Change_Password()
     else:
-        print("Your New Passwords are not match. \nPlease Try Again")
+        print("\nYour Entering Passwords are not Match.\nSo,Your Password is Not Change.\nPlease Try Again")
 
 def Change_Admin_Password():
     global Users
@@ -453,11 +479,12 @@ def Change_Admin_Password():
     New_Password=input("Enter Your New Password: ",)
     NewPassword=input("Please Enter Your New Password Again: ",)
     if New_Password==NewPassword:
-        print("\nYour Password Change SuccessFul!")                #Admin Change there own password
         Dict_of_Admin['password_1']=New_Password
+        print("\nYour Password Change SuccessFul!")                #Admin Change there own password
+        Update_Change_Password()
         
     else:
-        print("Your Password Not Change. \nPlease Try Again")
+        print("\nYour Entering Passwords are not Match.\nSo,Your Password is Not Change.\nPlease Try Again")
 
 def withdraw():
     global Amount
@@ -466,20 +493,25 @@ def withdraw():
         try:
             Balance_check()
             print("====================================================================")           
-            Amount_1=int(input("Enter Your Withdraw Amount: ",))
-            if Balance-500>=Amount_1:    #Bank min balance is 500
-                Balance-=Amount_1+5 # 5Rs for Servise Charge
-                Amount=Amount_1
-                Entry_of_withdraw()
-                print("\nPlease take Your Money: ",Amount_1)
-                print("Your New Balance is: ",Balance)
-                break                                                     #in side of  the bank customers withdraw with Admin Help
-            else:
-                print("\nYou Have not Inof Money. \nYour Balance is: ",Balance)
-                print("Your Avaiable Balance is: ",Balance-500)
+            Amount_1=int(input("Enter the Customer's Needed Amount: ",))
+            if Amount_1>0:
+                if Balance-500>=Amount_1:    #Bank min balance is 500
+                    Balance-=Amount_1+5 # 5Rs for Servise Charge
+                    Amount=Amount_1
+                    Entry_of_withdraw()
+                    print("\nPlease take the Money: ",Amount_1)
+                    print("Customer New Balance is: ",Balance)
+                    break                                                     #in side of  the bank customers withdraw with Admin Help
+                else:
+                    print("\nYou Have not Inof Money. \nYour Balance is: ",Balance)
+                    print("Your Avaiable Balance is: ",Balance-500)
                 break
+            else:
+                print("Your Withdraw Amount Mustbe A Positive Number")
+            break
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Customer's Needed Amount!!!")
+        break
 
 def Deposit():
     global Balance
@@ -497,16 +529,15 @@ def Deposit():
                 print("New Balance is: ",Balance)
                 break
             else:
-                print("\nPlease Enter Positive Value only!!!")                
-                break
+                print("\nPlease Enter Positive Value only For Deposit Amount!!!")                
+            break
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only For Deposit Amount!!!")
+        break
 
 def Transactions_History():
     Dict_of_current_Customer=Customers_activities.get(Entering_User_ID)
-    for key,value in Dict_of_current_Customer.items():
-        # Dic_Customer_Activity=value
-        # List_Activity=list(Dic_Customer_Activity.values())     
+    for key,value in Dict_of_current_Customer.items(): 
         print("\n",value)
 
 def Transfer_Amount():
@@ -516,100 +547,196 @@ def Transfer_Amount():
     while True:
         try:
             Balance_check()
-            print("====================================================================")
-            print("We didn't give coins,10,20,50Rs.")
-            print("So, Please Enter the Transfer money should be as a multiple of 100Rs.")
-            print("Eg:SriLankan Rs.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.\n")           
+            print("====================================================================")           
             Amount_1=int(input("Enter Your Transfer Amount: ",))
             if Balance-505>=Amount_1:            #Bank min balance is 500
-                True
-                if Amount_1%100==0:                                    #for Customer tranfsfer there cash to another accound
-                    True
-                    try:
-                        print("====================================================================") 
-                        Customer_ID=int(input("Enter the Customer ID: ",))
-                        Customer1_ID=int(input("Please Enter the Customer ID Again: ",))
-                        if Customer_ID==Customer1_ID:
-                            for key,value in Customers.items():
-                                if key==Customer_ID:
-                                    Dic_of_Customer=value
-                                    Name_of_Customer=Dic_of_Customer.get('name')
-                                    while True:
-                                        try:
-                                            print("====================================================================")
-                                            print("Customer Name is: ",Name_of_Customer)                                    
-                                            print("\nif this Name is correct please enter to continue")
-                                            print("if this Name incorrect please enter to exit")
-                                            print("1.Continue \t2.Exit \n")
-                                            Choice_1=int(input("Enter Your New Choice: ",))
-                                            if Choice_1==1:
-                                                Balance-=Amount_1+5 # 5Rs for Servise Charge
-                                                Amount=Amount_1
-                                                Entry_of_withdraw()
+                True                   
+                try: 
+                    Customer_ID=int(input("\nEnter the Customer ID: ",))
+                    Customer1_ID=int(input("Please Enter the Customer ID Again: ",))
+                    if Customer_ID==Customer1_ID:
+                        for key,value in Customers.items():
+                            if key==Customer_ID:                                      #for Customer tranfsfer there cash to another accound
+                                Dic_of_Customer=value
+                                Name_of_Customer=Dic_of_Customer.get('name')
+                                while True:
+                                    try:
+                                        print("====================================================================")
+                                        print("Customer Name is: ",Name_of_Customer)                                    
+                                        print("\nif this Name is correct please enter to continue")
+                                        print("if this Name is incorrect please enter to Exit For left from Transfer Amount Option")
+                                        print("1.Continue \t2.Exit \n")
+                                        Choice_1=int(input("Enter Your New Choice: ",))
+                                        if Choice_1==1:
+                                            Balance-=Amount_1+5 # 5Rs for Servise Charge
+                                            Amount=Amount_1
+                                            Entry_of_withdraw()
 
-                                                Dict_of_Getting_Customer=Customers_activities.get(Customer1_ID)
-                                                Next_Activity_No=len(Dict_of_Getting_Customer)
-                                                New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
-                                                Dic_New_Activity=New_Activity.get(Next_Activity_No)
-                                                Dic_New_Activity['diposit']=Amount_1
-                                                Privous_Activity=Dict_of_Getting_Customer.get(Next_Activity_No-1)
-                                                Balance_1=Privous_Activity.get('balance')                                                                                           
-                                                Balance_1+=Amount_1
-                                                Dic_New_Activity['balance']=Balance_1
-                                                Dict_of_Getting_Customer.update(New_Activity)                                                
-                                                print("\nYour Transfer Amount is: ",Amount_1)
-                                                print("Your New Balance is: ",Balance)                                                 
-                                            elif Choice_1==2:
-                                                print("\nThank For Using Our Service. \nPlease take Your Card!!!")
-                                                print("====================================================================")
-                                                Options()
-                                            else:
-                                                print("\nEnter the Correct Number!!!")
-                                                continue
+                                            Dict_of_Getting_Customer=Customers_activities.get(Customer1_ID)
+                                            Next_Activity_No=len(Dict_of_Getting_Customer)
+                                            New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
+                                            Dic_New_Activity=New_Activity.get(Next_Activity_No)
+                                            Dic_New_Activity['diposit']=Amount_1
+                                            Privous_Activity=Dict_of_Getting_Customer.get(Next_Activity_No-1)
+                                            Balance_1=Privous_Activity.get('balance')                                                                                           
+                                            Balance_1+=Amount_1
+                                            Dic_New_Activity['balance']=Balance_1
+                                            Dict_of_Getting_Customer.update(New_Activity)                                
+                                            List_Customer_activity=list(Dic_New_Activity.values())    
+                                            file=open(f"Customer_{Customer1_ID}_activities.txt","a")
+                                            file.writelines(f'{List_Customer_activity}\n')
+                                            file.close()
+                                            print("\nYour Transfer Amount is: ",Amount_1)
+                                            print("Your New Balance is: ",Balance) 
+                                            break                                                
+                                        elif Choice_1==2:
+                                            True
                                             break
-                                        except ValueError:
-                                            print("\nPlease Enter Number Only!!!") 
-                                    break
-                            else:
-                                print("Customer ID is not Found!!!")
-                                Choice_1()
-                            break
+                                        else:
+                                            print("\nEnter the Correct Number for Your New Choice!!!")
+                                    except ValueError:
+                                        print("\nPlease Enter Number Only for Your New Choice!!!") 
+                                break
                         else:
-                            print("Your Re_Enter Customer User ID is Not Match") 
-                            Choice_1()     
-                    except ValueError:
-                        print("\nPlease Enter Number Only!!!") 
-                else:
-                    print("Your Avaiable Balance is:",Balance-505)
-                    print("\nWe didn't give coins,10,20,50Rs.")
-                    print("So, Please Enter the Transfer money should be as a multiple of 100Rs.")
-                    print("Eg:SriLankan Rs.100,200,300,...,900,1000,1100,1200,....2000,2100,...,3000,ect.")                   
-                    Choice_1()
+                            print("\nCustomer ID is not Found!!!")
+                        break
+                    else:
+                        print("\nYour Entering Customer User IDs are Not Match") 
+                    break     
+                except ValueError:
+                    print("\nPlease Enter Number Only for Customer ID!!!") 
             else:
                 print("\nYou Have not Inof Money. \nYour Balance is: ",Balance)
                 print("Your Avaiable Balance is: ",Balance-500)
-                Choice_1()
+            break
         except ValueError:
-            print("\nPlease Enter Number Only!!!")
+            print("\nPlease Enter Number Only for Transfer Amount!!!")
+        break
 
 def Add_Customer_Detail():
-    file=open("Customer_Details.txt","a")
-    file.writelines(str(List_Customer_Details))
+    Dic_Customer_Details=Customers[Entering_User_ID]                             #Dic customers --> import recoded data list 
+    List_Customer_Details=list(Dic_Customer_Details.values())    
+    file=open("Customers_Details.txt","a")
+    file.writelines(f'{List_Customer_Details}\n')
     file.close()
 
 def Add_User():
-    file=open("User_Details.txt","a")
-    file.writelines(str(List_User))
+    Dic_User=Users[Entering_User_ID]
+    List_User=list(Dic_User.values())
+    file=open("Users_Details.txt","a")
+    file.writelines(f'{List_User}\n')
     file.close()
 
 def Add_Activity():
+    Dic_Customer_activities=Customers_activities[Entering_User_ID]
+    Dic_Customer_activity=Dic_Customer_activities[00]
+    List_Customer_activity=list(Dic_Customer_activity.values())    
     file=open(f"Customer_{Entering_User_ID}_activities.txt","a")
-    file.writelines(str(List_Customer_activity))
+    file.writelines(f'{List_Customer_activity}\n')
     file.close()
 
-def Read_Activity():
-    file=open(f"Customer_{Entering_User_ID}_activities.txt","r")
-    file.readlines()
-    file.close()
+def Update_Customers():
+    global Customers
+    global Customer
+    try:
+        with open("Customers_Details.txt","r")as file:
+            file.readlines()
+            for line in file:
+                return Customer
+                No=Customer[0]
+                ID=Customer[1]
+                name=Customer[2]
+                age=Customer[3]
+                address=Customer[-3]
+                NIC_No=Customer[-1]
+                Contact_No=Customer[-1]
+                New_Customer={ID:{'No':No,'ID':ID,'name':name,'age':age,'address':address,'NIC_No':NIC_No,'Contact_No':Contact_No}} 
+                Customers.update(New_Customer)
+                Customer.clear()
+    except FileNotFoundError:
+        print("File Not Found")        
 
+def Update_Users():
+    global Users
+    global User
+    try:
+        file=open("Users_Details.txt","r")
+        file.readlines()
+        for line in file:
+            return User
+            ID=User[1]
+            No=User[0]
+            password=User[2]
+            New_User={ID:{'No':No,'ID':ID,'password':password}}
+            Users.update(New_User)
+            user.clear()
+        file.close()
+    except FileNotFoundError:
+        print("File Not Found")
+
+def Update_Activity():
+    global Customers
+    global Customers_activities
+    global Activity
+    while True:
+        try:
+            i=0
+            with open(f"Customer_{Entering_User_ID+i}_activities.txt","r")as file:
+                file.readlines()
+                for line in file:
+                    return Activity
+                    ID=Entering_User_ID+i
+                    No=Activity[0]
+                    Current_time=Activity[1]
+                    deposit=Activity[2]
+                    withdraw=Activity[-2]
+                    balance=Activity[-1]
+                    New_Customer_activities={ID:{No:{'No':No,"Time":Current_time,'diposit':deposit,'withdraw':withdraw,'balance':balance}}}
+                    Customers_activities.update(New_Customer_activities)
+                    Activity.clear()
+                i+=1
+        except FileNotFoundError:
+            print("File Not Found")
+        break
+
+def Update_Change_Password():
+    global Users
+    Dict_of_current_Customer=Users.get(Entering_User_ID)
+    List_Users=list(Users.keys())
+    Index_current_Customer=List_Users.index(Entering_User_ID)
+    List_User_Values=list(Dict_of_current_Customer.values())
+    try:
+        if Index_current_Customer>0:
+            with open("Users_Details.txt","r+")as file:
+                file.readlines(f'{Index_current_Customer}\n')
+                file.writeline(List_User_Values)
+        else:
+            with open("Users_Details.txt","w")as file:
+                file.writeline(List_User_Values)
+    except FileNotFoundError:
+        print("File Not Found")
+
+def Update_Change_Customer_Details():
+    global Customers
+    try:        
+        Dict_of_current_Customer=Customers.get(Entering_User_ID)
+        List_Customers=list(Customers.keys())
+        Index_current_Customer=List_Customers.index(Entering_User_ID)
+        List_User_Values=list(Dict_of_current_Customer.values())
+        if Index_current_Customer>0:        
+            with open("Customers_Details","r+")as file:
+                file.readlines(f'{Index_current_Customer}\n')
+                file.writeline(List_User_Values)
+        else:
+            with open("Customers_Details.txt","w")as file:
+                file.writeline()
+    except FileNotFoundError:
+        print("File Not Found")
+
+Update_Customers()
+# print(Customers)
+Update_Users()
+# print(Users)
+Update_Activity()
+# print(Update_Activity)
 Options()
