@@ -1,9 +1,12 @@
+#======================First using time in this Application Admin Must Be Change His Password & His details Go throw Customer Details Help For This Application Works Correct Way=================
 Entering_User_ID=10000 #Admin ID(Bank Managenment login) & Admin Can Not change His Admin ID
 #Because I defined He is As 1st Customer & New Customer IDs are incresing like New_Customer_ID=Admin_ID+1
 #If Bank want other kind of int Number   Bank Want to say to SoftWare Engineer & He will Change what they want starting to Admin ID Number
 #If they want other kind of str Number(int number with Letter or letters or ect...)  SoftWare Engineer want to add some codeing this Platform
 #Because I Write this Code For only int Type of ID Numbers
 Entering_User_password='8170126Gk' #Admin Password  & Admin can Change This password 
+# Admin's Customer Log Password=35666960Gk It is for Admin's ATM Usage. This can change in Customer Log in -> Change Password
+#Admin's Customer Log ID & Admin's Bank Managenment login ID are Same  
 Balance=50000
 Entering_User_Activity_No=00
 Amount=00                                       #global variable
@@ -640,8 +643,8 @@ def Update_Customers():
     global Customer
     try:
         with open("Customers_Details.txt","r")as file:
-            file.readlines()
-            for line in file:
+            for line in file:               
+                file.readline()
                 return Customer
                 No=Customer[0]
                 ID=Customer[1]
@@ -654,15 +657,15 @@ def Update_Customers():
                 Customers.update(New_Customer)
                 Customer.clear()
     except FileNotFoundError:
-        print("File Not Found")        
+        print("Update Customers File is Not Found")        
 
 def Update_Users():
     global Users
     global User
-    try:
-        file=open("Users_Details.txt","r")
-        file.readlines()
+    try:        
+        file=open("Users_Details.txt","r")        
         for line in file:
+            file.readline()
             return User
             ID=User[1]
             No=User[0]
@@ -672,7 +675,7 @@ def Update_Users():
             user.clear()
         file.close()
     except FileNotFoundError:
-        print("File Not Found")
+        print("Update User File is Not Found")
 
 def Update_Activity():
     global Customers
@@ -681,9 +684,9 @@ def Update_Activity():
     while True:
         try:
             i=0
-            with open(f"Customer_{Entering_User_ID+i}_activities.txt","r")as file:
-                file.readlines()
+            with open(f"Customer_{Entering_User_ID+i}_activities.txt","r")as file:                    
                 for line in file:
+                    file.readline()
                     return Activity
                     ID=Entering_User_ID+i
                     No=Activity[0]
@@ -696,7 +699,7 @@ def Update_Activity():
                     Activity.clear()
                 i+=1
         except FileNotFoundError:
-            print("File Not Found")
+            print("Update Activity File is Not Found")
         break
 
 def Update_Change_Password():
@@ -708,13 +711,13 @@ def Update_Change_Password():
     try:
         if Index_current_Customer>0:
             with open("Users_Details.txt","r+")as file:
-                file.readlines(f'{Index_current_Customer}\n')
-                file.writeline(List_User_Values)
+                file.readlines(Index_current_Customer)
+                file.writelines(f'\n{List_User_Values}')
         else:
             with open("Users_Details.txt","w")as file:
-                file.writeline(List_User_Values)
+                file.writelines(f'{List_User_Values}')
     except FileNotFoundError:
-        print("File Not Found")
+        print("Update Change password Details File is Not Found")
 
 def Update_Change_Customer_Details():
     global Customers
@@ -725,13 +728,13 @@ def Update_Change_Customer_Details():
         List_User_Values=list(Dict_of_current_Customer.values())
         if Index_current_Customer>0:        
             with open("Customers_Details","r+")as file:
-                file.readlines(f'{Index_current_Customer}\n')
-                file.writeline(List_User_Values)
+                file.readlines(Index_current_Customer)
+                file.writelines(f'\n{List_User_Values}')
         else:
             with open("Customers_Details.txt","w")as file:
-                file.writeline()
+                file.writelines(f'{List_User_Values}')
     except FileNotFoundError:
-        print("File Not Found")
+        print("Update Change Customer Details File is Not Found")
 
 Update_Customers()
 # print(Customers)
