@@ -14,15 +14,13 @@ Customer=[]
 User=[]
 Activity=[]
 
-import datetime as dt    
-on_time=dt.datetime.now()                                          #Time input for even every Transaction when were Done
-Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")
+import datetime as dt           #Time input for even every Transaction when were Done
 
 Customers={10000:{'No':00,'ID':10000,'name':'admin','age':21,'address':'address','NIC_No':'NIC_No','Contact_No':123456789}}
 Dic_Customer_Details=Customers[Entering_User_ID]                             #Dic customers --> import recoded data list 
 List_Customer_Details=list(Dic_Customer_Details.values())
 
-Customers_activities={10000:{00:{'No':00,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}}
+Customers_activities={10000:{00:{'No':00,"Time":00,'diposit':00,'withdraw':00,'balance':00}}}
 Dic_Customer_activities=Customers_activities[Entering_User_ID]
 Next_Activity_No=len(Dic_Customer_activities)
 Dic_Customer_activity=Dic_Customer_activities[00]
@@ -142,8 +140,10 @@ def Entry_of_withdraw():
     global Customers_activities
     Dict_of_current_Customer=Customers_activities.get(Entering_User_ID)
     Next_Activity_No=len(Dict_of_current_Customer)
+    on_time=dt.datetime.now()                                          
+    Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")
     New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
-    Dic_New_Activity=New_Activity.get(Next_Activity_No)
+    Dic_New_Activity=New_Activity.get(Next_Activity_No) 
     Dic_New_Activity['withdraw']=Amount
     Dic_New_Activity['balance']=Balance
     Dict_of_current_Customer.update(New_Activity)
@@ -156,10 +156,13 @@ def Entry_of_Diposit():
     global Customers_activities
     Dict_of_current_Customer=Customers_activities.get(Entering_User_ID)
     Next_Activity_No=len(Dict_of_current_Customer)
-    New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
-    Dic_New_Activity=New_Activity.get(Next_Activity_No)
+    New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":00,'diposit':00,'withdraw':00,'balance':00}}
+    Dic_New_Activity=New_Activity.get(Next_Activity_No)    
     Dic_New_Activity['diposit']=Amount
     Dic_New_Activity['balance']=Balance
+    on_time=dt.datetime.now()                                          
+    Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")
+    Dic_New_Activity["Time"]=Current_time
     Dict_of_current_Customer.update(New_Activity)
     List_Customer_activity=list(Dic_New_Activity.values())    
     file=open(f"Customer_{Entering_User_ID}_activities.txt","a")
@@ -255,7 +258,9 @@ def Add_Customer():
     age=input("Enter the Customer Age: ",)        
     address=input("Enter the Customer Address: ",)                           #create new accound for new customer 
     NIC_No=input("Enter the Customer NIC Number: ",)                         #only avaiable for admin 
-    Contact_No=input("Enter the Customer Mobile Number:",)             
+    Contact_No=input("Enter the Customer Mobile Number:",) 
+    on_time=dt.datetime.now()                                          
+    Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")            
     password=str(len(Customers)+11)+age
     New_Customer={ID:{'No':len(Customers),'ID':ID,'name':name,'age':age,'address':address,'NIC_No':NIC_No,'Contact_No':Contact_No}} 
     New_User={ID:{'No':len(Customers),'ID':ID,'password':password}}
@@ -577,8 +582,11 @@ def Transfer_Amount():
 
                                             Dict_of_Getting_Customer=Customers_activities.get(Customer1_ID)
                                             Next_Activity_No=len(Dict_of_Getting_Customer)
-                                            New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":Current_time,'diposit':00,'withdraw':00,'balance':00}}
+                                            New_Activity={Next_Activity_No:{'No':Next_Activity_No,"Time":00,'diposit':00,'withdraw':00,'balance':00}}
                                             Dic_New_Activity=New_Activity.get(Next_Activity_No)
+                                            on_time=dt.datetime.now()                                          
+                                            Current_time=on_time.strftime("%A, %Y-%b-%d   %I:%M:%S%p.")
+                                            Dic_New_Activity["Time"]=Current_time
                                             Dic_New_Activity['diposit']=Amount_1
                                             Privous_Activity=Dict_of_Getting_Customer.get(Next_Activity_No-1)
                                             Balance_1=Privous_Activity.get('balance')                                                                                           
